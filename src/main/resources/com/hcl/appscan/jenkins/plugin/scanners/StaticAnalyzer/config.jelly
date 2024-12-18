@@ -23,7 +23,7 @@ LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
                    </f:entry>
 
                    <f:entry field="includeSCAGenerateIRX">
-               		<f:checkbox id="includeSCAGenerateIRX" title="${%label.include.sca.generate.irx}" checked="${instance.isIncludeSCAGenerateIRX('true')}" default="true" name="includeSCAGenerateIRX" />
+               		<f:checkbox title="${%label.include.sca.generate.irx}" name="includeSCAGenerateIRX" checked="${instance.isIncludeSCAGenerateIRX('true')}" default="true" />
                            </f:entry>
                  
                  <f:entry title="${%label.scan.speed.option}">
@@ -71,9 +71,9 @@ LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
 
                <f:radioBlock name="scanMethod" title="${%label.upload.direct}" checked="${instance.isScanMethod('uploadDirect')}" value="uploadDirect" inline="true" >
                    <f:nested>
-                   <f:optionalBlock title="${%label.additional.options}" checked="${instance.getHasOptionsUploadDirect()}" name="hasOptionsUploadDirect" inline="true">
+                   <f:optionalBlock title="${%label.additional.options}" name="hasOptionsUploadDirect" checked="${instance.getHasOptionsUploadDirect()}" inline="true">
                    <f:entry field="includeSCAUploadDirect">
-                       <f:checkbox title="${%label.include.sca.upload.direct}" checked="${instance.isIncludeSCAUploadDirect('true')}" default="false" name="includeSCAUploadDirect"/>
+                       <f:checkbox title="${%label.include.sca.upload.direct}" name="includeSCAUploadDirect" checked="${instance.isIncludeSCAUploadDirect('true')}" default="false"/>
                    </f:entry>
                    </f:optionalBlock>
                    </f:nested>
@@ -81,11 +81,10 @@ LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
                
     <script type="text/javascript">
         // Attach event listener to the rescan checkbox
-        document.getElementsByName('rescan')[0].addEventListener('change', toggleVisibilityBasedOnRescan);
-
-        document.getElementsByName('hasOptions')[0]?.addEventListener('change', toggleVisibilityBasedOnRescan);
-        document.querySelector('input[name="scanMethod"][value="createIRX"]').addEventListener('change', toggleVisibilityBasedOnRescan);
-        document.querySelector('input[name="scanMethod"][value="uploadDirect"]').addEventListener('change', toggleVisibilityBasedOnRescan);
+        document.getElementsByName('rescan')[2].addEventListener('change', toggleVisibilityBasedOnRescan);
+        document.getElementsByName('includeSCAGenerateIRX')[0].addEventListener('change', toggleVisibilityBasedOnRescan);
+        document.getElementsByName('hasOptionsUploadDirect')[0].addEventListener('change', toggleVisibilityBasedOnRescan);
+        document.getElementsByName('includeSCAUploadDirect')[0].addEventListener('change', toggleVisibilityBasedOnRescan);
         
         window.addEventListener('load', toggleVisibilityBasedOnRescan);
         

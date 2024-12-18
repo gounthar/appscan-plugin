@@ -50,15 +50,19 @@ public class DynamicAnalyzer extends Scanner {
 	private String m_loginUser;
 	private Secret m_loginPassword;
 	private String m_trafficFile;
+	private String m_executionId;
+	private boolean m_incrementalScan;
 
 	@Deprecated
 	public DynamicAnalyzer(String target) {
-		this(target, false, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY);
+		this(target, false, false, EMPTY, false, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY);
 	}
 
 	@Deprecated
-	public DynamicAnalyzer(String target, boolean hasOptions, String presenceId, String scanFile, String scanType, String optimization, String extraField, String loginUser, String loginPassword, String trafficFile, String loginType) {
-		super(target, hasOptions);
+	public DynamicAnalyzer(String target, boolean hasOptions, boolean rescan, String scanId, boolean incrementalScan, String executionId, String presenceId, String scanFile, String scanType, String optimization, String extraField, String loginUser, String loginPassword, String trafficFile, String loginType) {
+		super(target, hasOptions, rescan, scanId);
+		m_incrementalScan = incrementalScan;
+		m_executionId = executionId;
 		m_presenceId = presenceId;
 		m_scanFile = scanFile;
 		m_scanType = scanFile != null && !scanFile.equals(EMPTY) ? CUSTOM : scanType;
@@ -72,8 +76,10 @@ public class DynamicAnalyzer extends Scanner {
 
 	@DataBoundConstructor
 
-	public DynamicAnalyzer(String target, boolean hasOptions) {
-		super(target, hasOptions);
+	public DynamicAnalyzer(String target, boolean hasOptions, boolean rescan, String scanId) {
+		super(target, hasOptions, rescan, scanId);
+		m_incrementalScan = false;
+		m_executionId = EMPTY;
 		m_presenceId = EMPTY;
 		m_scanFile = EMPTY;
 		m_scanType = EMPTY;
@@ -85,7 +91,26 @@ public class DynamicAnalyzer extends Scanner {
 		m_trafficFile = EMPTY;
 	}
 
-	@DataBoundSetter
+    @DataBoundSetter
+    public void setIncrementalScan(boolean incrementalScan) {
+        m_incrementalScan = incrementalScan;
+    }
+
+    public boolean getIncrementalScan() {
+        return m_incrementalScan;
+    }
+
+    @DataBoundSetter
+    public void setExecutionId(String executionId) {
+        m_executionId = executionId;
+    }
+
+    public String getExecutionId() {
+        return m_executionId;
+    }
+
+
+    @DataBoundSetter
 	public void setLoginUser(String loginUser) {
 		m_loginUser = loginUser;
 	}
@@ -259,6 +284,13 @@ public class DynamicAnalyzer extends Scanner {
 		if (!m_presenceId.equals(EMPTY)) {
 				properties.put(PRESENCE_ID, m_presenceId);
 		}
+        if(isRescan() && isNullOrEmpty(getScanId()) ){
+            properties.put("ScanId",getScanId());
+            if(m_incrementalScan && isNullOrEmpty(m_executionId)) {
+                properties.put("IncrementalBaseJobId", m_executionId);
+                properties.put("IsIncrementalRetest", "true");
+            }
+        }
 
 		return properties;
 	}

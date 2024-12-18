@@ -71,34 +71,36 @@ function waitClicked(e) {
 }
 
 function toggleVisibilityBasedOnRescan() {
-     var rescanChecked = document.getElementsByName('rescan')[0].checked;
-      
-    var isCreateIRXSelected = document.querySelector('input[type="radio"][value="createIRX"]').checked;
-    var hasOptionsChecked = document.getElementsByName('hasOptions')[0].checked;
-    var includeSCACheckbox = document.getElementById('includeSCAGenerateIRX');
+	var rescanChecked = document.getElementsByName('rescan')[1].checked;
+	var includeSCACheckbox = document.getElementsByName('includeSCAGenerateIRX')[0];
+	var hasOptionsUploadDirectElement = document.getElementsByName('hasOptionsUploadDirect')[0];
+	var includeSCADirectCheckbox = document.getElementsByName('includeSCAUploadDirect')[0];
 
-    var isUploadDirectSelected = document.querySelector('input[type="radio"][value="uploadDirect"]').checked;
-    var hasOptionsUploadDirectElement = document.getElementsByName('hasOptionsUploadDirect')[0];
-    var includeSCADirectCheckbox = document.getElementById('includeSCAUploadDirect');
+	if (rescanChecked) {
+        includeSCACheckbox.disabled = true;
+        hasOptionsUploadDirectElement.disabled = true;
+        includeSCADirectCheckbox.disabled = true;
+	} else {
+        includeSCACheckbox.disabled = false;
+        hasOptionsUploadDirectElement.disabled = false;
+        includeSCADirectCheckbox.disabled = false;
+	}
+}
+
+function toggleVisibilityBasedOnRescanDAST() {
+    var rescanChecked = document.getElementsByName('rescan')[0].checked;
+    var startingURL = document.getElementsByName('target')[0];
+    var hasOptions = document.getElementsByName('hasOptions')[0];
 
      if (rescanChecked) {
-        if (hasOptionsChecked) {
-            includeSCACheckbox.disabled = true;
-        }
-        if (isUploadDirectSelected) {
-            hasOptionsUploadDirectElement.disabled = true;
-            includeSCADirectCheckbox.disabled = true;
-        }
+        startingURL.classList.add('disabled');
+        startingURL.disabled = true;
+        hasOptions.checked = false;
+        hasOptions.disabled = true;
     } else {
-        if (isCreateIRXSelected) {
-            if (hasOptionsChecked) {
-                includeSCACheckbox.disabled = false;
-            }
-        } 
-        if (isUploadDirectSelected) {
-            hasOptionsUploadDirectElement.disabled = false;
-            includeSCADirectCheckbox.disabled = false;
-        }
+        startingURL.classList.remove('disabled');
+        startingURL.disabled = false;
+        hasOptions.disabled = false;
     }
 }
 
